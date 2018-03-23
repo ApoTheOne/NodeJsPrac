@@ -1,0 +1,1 @@
+global.ans = 4;
