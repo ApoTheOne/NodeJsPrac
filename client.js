@@ -16,7 +16,10 @@ server.on('response', (resp) => {
     process.stdout.write('\n\> ');
 });
 
+let command, args;
+
 rl.on('line', (input) => {
     //console.log(input);
-    client.emit('command', input);
+    [command, ...args] = input.split(' ');
+    client.emit('command', command, args);
 });
