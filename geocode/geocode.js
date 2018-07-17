@@ -1,6 +1,6 @@
 const request = require('request');
 
-module.exports.getAddress = function getAddress(address) {
+let getAddress = (address, callback) => {
     request(
         {
             url: `http://maps.googleapis.com/maps/api/geocode/json?address=${address}`,
@@ -8,17 +8,17 @@ module.exports.getAddress = function getAddress(address) {
         },
         (error, response, body) => {
             if (error) {
-                console.log(`Oops : ${error}`);
+                callback(`Oops : ${error}`);
             } else if (body.status === 'ZERO_RESULTS') {
-                console.log('Address not found.');
+                callback('Address not found.');
             } else if (body.status === 'OK') {
-                console.log(`Address : ${body.results[0].formatted_address}`);
-                console.log(
-                    `Lat: ${body.results[0].geometry.location.lat}, Lng: ${
-                        body.results[0].geometry.location.lng
-                    }`
-                );
+                callback(undefined, {
+                    address: body.results[0].formatted_address,
+                    Lat: body.results[0].geometry.location.lat,
+                    Lng: body.results[0].geometry.location.lng
+                });
             }
         }
     );
 };
+module.exports.getAddress = getAddress;
